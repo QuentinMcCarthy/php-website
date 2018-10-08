@@ -1,4 +1,50 @@
 <?php
+	if($_POST){
+		// var_dump($_POST);
+		/*
+		$name = $_POST["name"];
+		$email = $_POST["email"];
+		$message = $_POST["message"];
+		$subscribe = $_POST["subscribe"];
+		*/
+
+		extract($_POST);
+
+		$errors = array();
+
+		if(!$name){
+			array_push($errors, "Name is required, please enter a value");
+		} elseif(strlen($name) < 2){
+			array_push($errors, "Please enter at least 2 characters for your name");
+		} elseif(strlen($name) > 100){
+			array_push($errors, "Your name can't be more than 100 characters");
+		}
+
+		if(!$email){
+			array_push($errors, "Email address is required, please enter a value");
+		} elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+			array_push($errors, "Please enter a valid email address");
+		}
+
+		if(!$message){
+			array_push($errors, "Please enter a message");
+		} elseif(strlen($message) < 10){
+			array_push($errors, "Message is too short, must be at least 10 characters");
+		} elseif(strlen($message) > 1000){
+			array_push($errors, "Message is too long, please restrict it to 1000 characters");
+		}
+
+		if(empty($errors)){
+			var_dump("Valid");
+		} else {
+			var_dump($errors);
+		}
+
+		die();
+	}
+
+
+
 	$page = "contact";
 
 	require "includes/head.php";
@@ -15,7 +61,7 @@
 					</div>
 					<div class="form-group">
 						<label for="email">Email</label>
-						<input type="email" name="email" class="form-control" placeholder="Enter Email" value="" required>
+						<input type="email" name="email" class="form-control" placeholder="Enter Email" value="">
 					</div>
 					<div class="form-group">
 						<label for="message">Message</label>
