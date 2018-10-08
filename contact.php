@@ -6,7 +6,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Cover Template for Bootstrap</title>
+		<title>PHP website<</title>
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -43,7 +43,7 @@
 			</footer>
 		</div>
 
-		
+
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
