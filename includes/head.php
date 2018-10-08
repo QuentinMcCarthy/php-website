@@ -27,7 +27,7 @@
 							$path = ".";
 
 							// Initialise array for files in the path as well as a counter
-							$files = array(); $f = 0;
+							$files = array();
 
 							// Open the directory if it is valid
 							if(is_dir($path)){
@@ -39,7 +39,7 @@
 											// Ignore folders
 											if(is_dir($path."/".$file) === false){
 												// Add the file to the array
-												$files[$f++] = $file;
+												array_push($files, $file);
 											}
 										}
 									}
