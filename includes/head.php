@@ -21,9 +21,44 @@
 					<h3 class="masthead-brand">Cover</h3>
 
 					<nav class="nav nav-masthead justify-content-center">
-						<a class="nav-link <?php if($page === "home"){ echo "active"; } ?>" href="index.php">Home</a>
-						<a class="nav-link <?php if($page === "features"){ echo "active"; } ?>" href="features.php">Features</a>
-						<a class="nav-link <?php if($page === "contact"){ echo "active"; } ?>" href="contact.php">Contact</a>
+						<a class="nav-link <?php if($page === 'home'){ echo 'active'; } ?>" href="index.php">Home</a>
+						<?php
+							// The path to search
+							$path = ".";
+
+							// Initialise array for files in the path as well as a counter
+							$files = array(); $f = 0;
+
+							// Open the directory if it is valid
+							if(is_dir($path)){
+								if($handle = opendir($path)){
+									// Read every file in the opened directory
+									while(($file = readdir($handle)) !== false){
+										// Don't push hidden files or the index
+										if($file[0] != "." && $file != "index.php"){
+											// Ignore folders
+											if(is_dir($path."/".$file) === false){
+												// Add the file to the array
+												$files[$f++] = $file;
+											}
+										}
+									}
+
+									// Close the directory when done
+									closedir($handle);
+								}
+							}
+
+							// Sort and reset the arrays
+							sort($files); reset($files);
+
+							// List the files for navigation
+							foreach ($files as $file):
+								// Get the file name for each file
+								$filename = pathinfo($file, PATHINFO_FILENAME);
+						?>
+						<a class="nav-link <?php if($page === $filename){ echo "active"; } ?>" href="<?= $file; ?>"><?= ucfirst($filename) ?></a>
+						<?php endforeach; ?>
 					</nav>
 				</div>
 			</header>
