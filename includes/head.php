@@ -49,7 +49,7 @@
 								}
 							}
 
-							// Sort and reset the arrays
+							// Sort and reset the array
 							sort($files); reset($files);
 
 							// List the files for navigation
