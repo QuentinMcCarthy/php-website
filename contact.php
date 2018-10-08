@@ -35,7 +35,21 @@
 		}
 
 		if(empty($errors)){
-			// var_dump("Valid");
+			$to = $email;
+			$subject = "Email Enquiry";
+			$emailMessage = "Email from PHP website";
+			$emailMessage += $message;
+
+			// "From" and "Reply-To" specified as $email to avoid others' taking/using public email
+			$headers = array(
+				"From" => $email,
+				"Reply-To" => $email,
+				"X-Mailer" => "PHP/".phpversion()
+			);
+
+			mail($to,$subject,$emailMessage,$headers);
+
+			header("Location: index.php");
 		}
 	}
 
