@@ -35,12 +35,8 @@
 		}
 
 		if(empty($errors)){
-			var_dump("Valid");
-		} else {
-			var_dump($errors);
+			// var_dump("Valid");
 		}
-
-		die();
 	}
 
 
@@ -54,21 +50,31 @@
 				<h1 class="cover-heading">Contact</h1>
 				<p class="lead">Send us an Email</p>
 
+				<?php if($_POST && !empty($errors)): ?>
+				<div class="alert alert-danger" role="alert">
+					<ul class="mb-0">
+						<?php foreach($errors as $error): ?>
+						<li><?= $error ?></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+				<?php endif; ?>
+
 				<form method="POST" action="contact.php" enctype="multipart/form-data">
 					<div class="form-group">
 						<label for="name">Name</label>
-						<input type="text" name="name" class="form-control" placeholder="Enter Name" value="">
+						<input type="text" name="name" class="form-control" placeholder="Enter Name" value="<?php if(isset($_POST["name"])){ echo $_POST["name"]; } ?>">
 					</div>
 					<div class="form-group">
 						<label for="email">Email</label>
-						<input type="email" name="email" class="form-control" placeholder="Enter Email" value="">
+						<input type="email" name="email" class="form-control" placeholder="Enter Email" value="<?php if(isset($_POST["email"])){ echo $_POST["email"]; } ?>">
 					</div>
 					<div class="form-group">
 						<label for="message">Message</label>
-						<textarea name="message" rows="3" class="form-control"></textarea>
+						<textarea name="message" rows="3" class="form-control"><?php if(isset($_POST["message"])){ echo $_POST["message"]; } ?></textarea>
 					</div>
 					<div class="form-group">
-						<input type="checkbox" name="subscribe" class="form-check-input" id="subscribe">
+						<input type="checkbox" name="subscribe" class="form-check-input" id="subscribe" <?php if(isset($_POST["subscribe"])){ echo "checked"; } ?>>
 						<label class="form-check-label" for="subscribe">Subscribe to Newsletter</label>
 					</div>
 					<button type="submit" class="btn btn-outline-light btn-block">Submit</button>
