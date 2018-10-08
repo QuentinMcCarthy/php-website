@@ -1,4 +1,8 @@
-<?php require "includes/head.php"; ?>
+<?php
+	$page = "features";
+
+	require "includes/head.php";
+?>
 
 			<main role="main" class="inner cover">
 				<h1 class="cover-heading">Features page, woop</h1>

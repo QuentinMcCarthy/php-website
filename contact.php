@@ -1,4 +1,8 @@
-<?php require "includes/head.php"; ?>
+<?php
+	$page = "contact";
+
+	require "includes/head.php";
+?>
 
 			<main role="main" class="inner cover">
 				<h1 class="cover-heading">Contact page, woop</h1>

@@ -6,7 +6,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>PHP website</title>
+		<title>PHP website - <?= $page; ?></title>
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -21,9 +21,9 @@
 					<h3 class="masthead-brand">Cover</h3>
 
 					<nav class="nav nav-masthead justify-content-center">
-						<a class="nav-link active" href="index.php">Home</a>
-						<a class="nav-link" href="features.php">Features</a>
-						<a class="nav-link" href="contact.php">Contact</a>
+						<a class="nav-link <?php if($page === "home"){ echo "active"; } ?>" href="index.php">Home</a>
+						<a class="nav-link <?php if($page === "features"){ echo "active"; } ?>" href="features.php">Features</a>
+						<a class="nav-link <?php if($page === "contact"){ echo "active"; } ?>" href="contact.php">Contact</a>
 					</nav>
 				</div>
 			</header>
