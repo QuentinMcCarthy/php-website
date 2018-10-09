@@ -1,4 +1,10 @@
 <?php
+	// Include composer autoload
+	require "vendor/autoload.php";
+
+	// Import the Intervention Image Manager Class
+	use Intervention\Image\ImageManager;
+
 	// phpinfo();
 	// die();
 
@@ -29,14 +35,33 @@
 			array_push($errors, "File type not allowed, can only be a jpg or png");
 		}
 
-		$destination = "img/uploads";
-		if(!is_dir($destination)){
-			mkdir($destination."/", 0777, true);
+		if(empty($errors)){
+			$destination = "img/uploads";
+			if(!is_dir($destination)){
+				mkdir($destination."/", 0777, true);
+			}
+
+			$newFileName = uniqid().".".$fileExt;
+
+			move_uploaded_file($fileTmp, $destination."/".$newFileName);
+
+			$manager = new ImageManager();
+
+			$thumbDestination = "img/uploads/thumbs";
+
+			if(!is_dir($thumbDestination)){
+				mkdir($thumbDestination."/", 0777, true);
+			}
+
+			$thumbnailImage = $manager->make($fileTmp);
+
+			$thumbnailImage->resize(300, null, function($constraint){
+				$constraint->aspectRatio();
+				$constraint->upsize();
+			});
+
+			$thumbnailImage->save($thumbDestination."/".$newFileName, 100);
 		}
-
-		$newFileName = uniqid().".".$fileExt;
-
-		move_uploaded_file($fileTmp, $destination."/".$newFileName);
 	}
 
 	$page = "imageUpload";
