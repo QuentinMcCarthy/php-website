@@ -8,63 +8,75 @@
 	// phpinfo();
 	// die();
 
+	$uploadcookie_name = "imageUploaded";
+	$uploadcookie_value = "true";
+	$uploadcookie_expiry = time() + (60); // 1 minute from now
+	$uploadcookie_path = "/";
+
 	$errors = array();
-	if(isset($_FILES["image"])){
-		$fileSize = $_FILES["image"]["size"];
-		$fileTmp = $_FILES["image"]["tmp_name"];
-		$fileType = $_FILES["image"]["type"];
 
-		// var_dump($fileSize);
-		// var_dump($fileTmp);
-		// var_dump($fileType);
+	if(!isset($_COOKIE[$uploadcookie_name])){
+		if(isset($_FILES["image"])){
+			$fileSize = $_FILES["image"]["size"];
+			$fileTmp = $_FILES["image"]["tmp_name"];
+			$fileType = $_FILES["image"]["type"];
 
-		// If the file is over 5mb
-		if($fileSize > 5000000){
-			array_push($errors, "The file is too large, must be under 5MB");
-		}
+			// var_dump($fileSize);
+			// var_dump($fileTmp);
+			// var_dump($fileType);
 
-		$validExtensions = array(
-			"jpeg",
-			"jpg",
-			"png"
-		);
-		$fileNameArray = explode(".", $_FILES["image"]["name"]);
-		$fileExt = strtolower(end($fileNameArray));
-
-		if(!in_array($fileExt, $validExtensions)){
-			array_push($errors, "File type not allowed, can only be a jpg or png");
-		}
-
-		if(empty($errors)){
-			$destination = "img/uploads";
-			if(!is_dir($destination)){
-				mkdir($destination."/", 0777, true);
+			// If the file is over 5mb
+			if($fileSize > 5000000){
+				array_push($errors, "The file is too large, must be under 5MB");
 			}
 
-			$newFileName = uniqid().".".$fileExt;
+			$validExtensions = array(
+				"jpeg",
+				"jpg",
+				"png"
+			);
+			$fileNameArray = explode(".", $_FILES["image"]["name"]);
+			$fileExt = strtolower(end($fileNameArray));
 
-			// move_uploaded_file($fileTmp, $destination."/".$newFileName);
-
-			$manager = new ImageManager();
-
-			$mainImage = $manager->make($fileTmp);
-			$mainImage->save($destination."/".$newFileName);
-
-			$thumbDestination = "img/uploads/thumbs";
-
-			if(!is_dir($thumbDestination)){
-				mkdir($thumbDestination."/", 0777, true);
+			if(!in_array($fileExt, $validExtensions)){
+				array_push($errors, "File type not allowed, can only be a jpg or png");
 			}
 
-			$thumbnailImage = $manager->make($fileTmp);
+			if(empty($errors)){
+				$destination = "img/uploads";
+				if(!is_dir($destination)){
+					mkdir($destination."/", 0777, true);
+				}
 
-			$thumbnailImage->resize(300, null, function($constraint){
-				$constraint->aspectRatio();
-				$constraint->upsize();
-			});
+				$newFileName = uniqid().".".$fileExt;
 
-			$thumbnailImage->save($thumbDestination."/".$newFileName, 100);
+				// move_uploaded_file($fileTmp, $destination."/".$newFileName);
+
+				$manager = new ImageManager();
+
+				$mainImage = $manager->make($fileTmp);
+				$mainImage->save($destination."/".$newFileName);
+
+				$thumbDestination = "img/uploads/thumbs";
+
+				if(!is_dir($thumbDestination)){
+					mkdir($thumbDestination."/", 0777, true);
+				}
+
+				$thumbnailImage = $manager->make($fileTmp);
+
+				$thumbnailImage->resize(300, null, function($constraint){
+					$constraint->aspectRatio();
+					$constraint->upsize();
+				});
+
+				$thumbnailImage->save($thumbDestination."/".$newFileName, 100);
+
+				setcookie($uploadcookie_name, $uploadcookie_value, $uploadcookie_expiry, $uploadcookie_path);
+			}
 		}
+	} else {
+		array_push($errors, "You must wait a minute between image uploads");
 	}
 
 	$page = "imageUpload";
@@ -77,7 +89,7 @@
 
 	<?php if($_FILES && !empty($errors)): ?>
 		<div class="alert alert-danger" role="alert">
-			<ul>
+			<ul class="mb-0">
 				<?php foreach($errors as $error): ?>
 					<li><?= $error; ?></li>
 				<?php endforeach; ?>
