@@ -43,9 +43,12 @@
 
 			$newFileName = uniqid().".".$fileExt;
 
-			move_uploaded_file($fileTmp, $destination."/".$newFileName);
+			// move_uploaded_file($fileTmp, $destination."/".$newFileName);
 
 			$manager = new ImageManager();
+
+			$mainImage = $manager->make($fileTmp);
+			$mainImage->save($destination."/".$newFileName);
 
 			$thumbDestination = "img/uploads/thumbs";
 
