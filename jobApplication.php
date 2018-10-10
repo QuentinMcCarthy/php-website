@@ -1,8 +1,8 @@
 <?php
 	function getRealIpAddr(){
-		if (!empty($_SERVER['HTTP_CLIENT_IP'])){   //check ip from share internet
+		if(!empty($_SERVER['HTTP_CLIENT_IP'])){   //check ip from share internet
 			$ip=$_SERVER['HTTP_CLIENT_IP'];
-		} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){   //to check ip is pass from proxy
+		} elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){   //to check ip is pass from proxy
 			$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
 		} else {
 			$ip=$_SERVER['REMOTE_ADDR'];
@@ -22,7 +22,7 @@
 	$errors = array();
 
 	if(!isset($_COOKIE[$applicationcookie_name])){
-		if(!isset($_POST)){
+		if($_POST){
 			if(isset($_FILES["image"])){
 				$imageSize = $_FILES["image"]["size"];
 				$imageTmp = $_FILES["image"]["tmp_name"];
@@ -102,23 +102,35 @@
 			}
 
 			if(empty($errors)){
-				$destination = "jobApps";
-
 				$userID = uniqid();
 
+				$destination = "jobApps";
+
+				while(is_dir($destination)){
+					$userID = uniqid();
+
+					$destination = "jobApps";
+				}
+
 				if(!is_dir($destination)){
-					mkdir($destination."/".$userID."/", 0777, true);
+					mkdir($destination."/".$userID, 0777, true);
 				}
 
 				$newImageName = "userImage.".$imageExt;
 
-				move_uploaded_file($imageTmp, $destination."/".$newImageName);
+				move_uploaded_file($imageTmp, $destination."/".$userID."/".$newImageName);
 
 				$newCVName = "userCV.".$cvExt;
 
-				move_uploaded_file($cvTmp, $destination."/".$newCVName);
+				move_uploaded_file($cvTmp, $destination."/".$userID."/".$newCVName);
 
-				$log = getRealIpAddr().$userID.",".$name.",".$email.",".$message;
+				$data = $destination."/".$userID.",".$name.",".$email.",".$message;
+
+				file_put_contents($destination."/".$userID."/details.txt", $data.PHP_EOL, FILE_APPEND);
+
+				$log = getRealIpAddr().",".time().",".$destination."/".$userID."\n";
+
+				file_put_contents($destination."/applications.log", $log.PHP_EOL, FILE_APPEND);
 
 				setcookie($applicationcookie_name, $applicationcookie_value, $applicationcookie_expiry, $applicationcookie_path);
 			}
@@ -145,7 +157,7 @@
 		</div>
 	<?php endif; ?>
 
-	<form  action="jobApplication.php" method="post" enctype="multipart/form-data">
+	<form action="jobApplication.php" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="image">Image of yourself</label>
 			<input type="file" name="image" class="form-control-file">
