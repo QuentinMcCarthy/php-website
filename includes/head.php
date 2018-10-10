@@ -25,6 +25,7 @@
 						<a class="nav-link <?php if($page === 'features'){ echo 'active'; } ?>" href="features.php">Features</a>
 						<a class="nav-link <?php if($page === 'contact'){ echo 'active'; } ?>" href="contact.php">Contact</a>
 						<a class="nav-link <?php if($page === 'imageUpload'){ echo 'active'; } ?>" href="imageUpload.php">Upload an Image</a>
+						<a class="nav-link <?php if($page === 'jobApplication'){ echo 'active'; } ?>" href="jobApplication.php">Apply for a Job</a>
 					</nav>
 				</div>
 			</header>
