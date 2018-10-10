@@ -21,7 +21,29 @@
 
 	$errors = array();
 
-	if(!isset($_COOKIE[$applicationcookie_name])){
+	// Open logfile and read data
+	$logFile = explode("\n", fread(fopen("jobApps/applications.log", "r"), filesize("jobApps/applications.log")));
+
+	$logData = array();
+
+	foreach($logFile as $data){
+		array_push($logData, explode(",", $data));
+	}
+
+	$alreadySent = false;
+
+	// If the IP matches and 7 weeks haven't passed since the submission of the application
+	// then disallow another application sending
+	foreach($logData as $dataItem){
+		if($dataItem[0] === getRealIpAddr()){
+			if($dataItem[1] + 604800 > time()){
+				$alreadySent = true;
+			}
+		}
+	}
+
+	// Check the cookie as well as the IP
+	if(!isset($_COOKIE[$applicationcookie_name]) && !$alreadySent){
 		if($_POST){
 			if(isset($_FILES["image"])){
 				$imageSize = $_FILES["image"]["size"];
