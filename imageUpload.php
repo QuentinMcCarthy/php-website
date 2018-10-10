@@ -87,7 +87,7 @@
 	<h1 class="cover-heading">Image Upload Page</h1>
 	<p class="lead">Upload an image to our server</p>
 
-	<?php if($_FILES && !empty($errors)): ?>
+	<?php if(!empty($errors)): ?>
 		<div class="alert alert-danger" role="alert">
 			<ul class="mb-0">
 				<?php foreach($errors as $error): ?>
